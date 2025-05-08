@@ -9,14 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.bookstore.util.*;
+import com.bookstore.util.ShippingUtil;
 
 
-
-/**
- * Servlet implementation class ShippingServlet
- *
- */
 @WebServlet("/ShippingServlet")
 public class ShippingServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
