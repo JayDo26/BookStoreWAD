@@ -18,7 +18,6 @@
 				<div class="cord">
 					<div class="card-body"></div>
 
-
 					<h4 class="text-center">Add Books</h4>
 
 					<c:if test="${not empty succMsg}">
@@ -33,49 +32,108 @@
 						<!-- Remove the message after it is displayed -->
 					</c:if>
 
-
-
 					<form action="${pageContext.request.contextPath}/AddBooksServlet"
 						method="post" enctype="multipart/form-data">
+						
+						<div class="form-group">
+							<label>Book Type:</label>
+							<div class="form-check">
+								<input class="form-check-input" type="radio" name="bookType" id="newBook" 
+									value="new" checked onchange="toggleBookForm()">
+								<label class="form-check-label" for="newBook">
+									New Book
+								</label>
+							</div>
+							<div class="form-check">
+								<input class="form-check-input" type="radio" name="bookType" id="oldBook" 
+									value="old" onchange="toggleBookForm()">
+								<label class="form-check-label" for="oldBook">
+									Refill Existing Book
+								</label>
+							</div>
+						</div>
+						
+						<!-- Book ID field (only shown for refilling) -->
+						<div id="bookIdField" class="form-group" style="display: none;">
+							<label for="bookId">Book ID (optional, can search by title and author)</label>
+							<input name="bookId" type="text" class="form-control" id="bookId">
+						</div>
 
 						<div class="form-group">
-							<label for="exampleInputEmail1">Book Name</label> <input
+							<label for="bookName">Book Name</label> <input
 								name="bname" type="text" class="form-control"
-								id="exampleInputEmail1" aria-describedby="emailHelp">
+								id="bookName" required>
 						</div>
 
 						<div class="form-group">
-							<label for="exampleInputEmail1">Author Name</label> <input
+							<label for="authorName">Author Name</label> <input
 								name="author" type="text" class="form-control"
-								id="exampleInputEmail1" aria-describedby="emailHelp">
+								id="authorName" required>
 						</div>
+						
 						<div class="form-group">
-							<label for="exampleInputPassword1">Price</label> <input
-								name="price" type="number" class="form-control"
-								id="exampleInputPassword1">
+							<label for="price">Price</label> <input
+								name="price" type="number" step="0.01" class="form-control"
+								id="price" required>
 						</div>
+						
 						<div class="form-group">
-							<label for="exampleInputEmail1">Description</label> <input
+							<label for="quantity">Quantity</label> <input
+								name="quantity" type="number" class="form-control"
+								id="quantity" min="1" value="1" required>
+						</div>
+						
+						<div id="descriptionField" class="form-group">
+							<label for="description">Description</label> <input
 								name="bdes" type="text" class="form-control"
-								id="exampleInputEmail1" aria-describedby="emailHelp">
+								id="description">
 						</div>
 
-
-						<div class="form-group">
-							<label for="exampleFormControlFile1">Enter Image Path</label> <input
-								name="bimg" type="text" class="form-control"
-								id="exampleFormControlFile1"
-								placeholder="Enter image path or URL">
+						<div id="imageField" class="form-group">
+							<label for="bookImage">Book Image</label> 
+							<input name="bimg" type="file" class="form-control-file" 
+							   id="bookImage">
 						</div>
 		
+						<div class="form-check mb-4">
+						    <input class="form-check-input" type="checkbox" id="notifyPreorders" name="notifyPreorders">
+						    <label class="form-check-label" for="notifyPreorders">
+						        Notify users who preordered this book
+						    </label>
+						</div>
 
-						<button type="submit" class="btn btn-primary">Add</button>
+						<button type="submit" class="btn btn-primary">Submit</button>
 					</form>
 
 				</div>
 			</div>
 		</div>
 	</div>
+
+	<script>
+		function toggleBookForm() {
+			const isNewBook = document.getElementById('newBook').checked;
+			const isOldBook = document.getElementById('oldBook').checked;
+			
+			// Toggle visibility based on selection
+			document.getElementById('bookIdField').style.display = isOldBook ? 'block' : 'none';
+			document.getElementById('descriptionField').style.display = isNewBook ? 'block' : 'none';
+			document.getElementById('imageField').style.display = isNewBook ? 'block' : 'none';
+			
+			// Update required attributes
+			document.getElementById('bookImage').required = isNewBook;
+			document.getElementById('description').required = isNewBook;
+			
+			// Update button text
+			const submitBtn = document.querySelector('button[type="submit"]');
+			submitBtn.textContent = isNewBook ? 'Add Book' : 'Update Quantity';
+		}
+		
+		// Initialize form state on page load
+		document.addEventListener('DOMContentLoaded', function() {
+			toggleBookForm();
+		});
+	</script>
 
 </body>
 </html>

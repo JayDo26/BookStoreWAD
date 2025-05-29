@@ -19,6 +19,7 @@ com/bookstore/admindaoimpl/AdminBookDaoImpl.class
 com/bookstore/servlet/SignupServlet.class
 com/bookstore/servlet/ConfirmOrderServlet.class
 com/bookstore/admindaoimpl/AdminDaoImpl.class
+com/bookstore/dao/PreorderDao.class
 com/bookstore/admindaoimpl/AdminOrderDaoImpl.class
 com/bookstore/servlet/SaveProfileServlet.class
 com/bookstore/util/DBUtil.class
@@ -33,6 +34,7 @@ com/bookstore/servlet/DeleteBookServlet.class
 com/bookstore/admindao/AdminDao.class
 com/bookstore/model/Books.class
 com/bookstore/servlet/SearchServlet.class
+com/bookstore/util/EmailSender.class
 com/bookstore/util/BookSearchUtil.class
 com/bookstore/servlet/EditBooksServlet.class
 com/bookstore/util/EmailContentUtil.class
@@ -40,12 +42,14 @@ com/bookstore/servlet/AddToCartServlet.class
 com/bookstore/dao/OrderDao.class
 com/bookstore/util/SendEmailUtil$1.class
 com/bookstore/util/BookSearchUtil$Trie.class
+com/bookstore/model/Preorder.class
 com/bookstore/servlet/AddBooksServlet.class
 com/bookstore/servlet/CartHomeServlet.class
 com/bookstore/dao/UserDao.class
 com/bookstore/admindao/AdminBookDao.class
 com/bookstore/dao/ProductDao.class
 com/bookstore/servlet/LoginServlet.class
+com/bookstore/daoimpl/PreorderDaoImpl.class
 com/bookstore/daoimpl/BookDaoImpl.class
 com/bookstore/servlet/UpdateCartServlet.class
 com/bookstore/model/Orders.class

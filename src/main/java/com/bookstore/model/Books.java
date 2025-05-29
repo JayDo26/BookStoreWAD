@@ -12,6 +12,7 @@ public class Books {
 	    private boolean sale = false; // Default not on sale
 	    private double discount_perc = 0.0; // Discount percentage from database
 	    private double sale_price = 0.0; // Sale price from database
+	    private int quantity; // add this field
 	    
 	    public Books() {
 	    
@@ -86,6 +87,14 @@ public class Books {
 	    
 	    public void setSale_price(double sale_price) {
 	        this.sale_price = sale_price;
+	    }
+	    
+	    public int getQuantity() {
+	        return quantity;
+	    }
+
+	    public void setQuantity(int quantity) {
+	        this.quantity = quantity;
 	    }
 	    
 	    // Helper method to get the actual price (either sale price or regular price)

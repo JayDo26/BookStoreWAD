@@ -841,7 +841,28 @@
 	            const bookId = $('#modalAddToCart').data('book-id');
 	            const bookTitle = $('#modalAddToCart').data('book-title');
 	            
-	            alert('Thank you for your preorder of "' + bookTitle + '"! We will notify you when the item is back in stock.');
+	            // Gửi yêu cầu preorder đến server
+	            $.ajax({
+                url: 'PreorderServlet',
+                type: 'POST',
+                data: { bookId: bookId },
+                success: function(response) {
+                    if (response.status === 'success') {
+                        alert('Cảm ơn bạn đã đăng ký nhận thông báo khi sách "' + bookTitle + '" có hàng! Chúng tôi sẽ gửi email thông báo cho bạn ngay khi sách được bổ sung.');
+                    } else if (response.status === 'login_required') {
+                        alert('Vui lòng đăng nhập để đăng ký nhận thông báo khi sách có hàng.');
+                        window.location.href = 'login.jsp';
+                    } else if (response.status === 'already_registered') {
+                        alert('Bạn đã đăng ký nhận thông báo cho sách này rồi. Chúng tôi sẽ thông báo ngay khi sách có hàng.');
+                    } else {
+                        alert('Đã xảy ra lỗi. Vui lòng thử lại sau.');
+                    }
+                },
+                error: function() {
+                    alert('Đã xảy ra lỗi khi đăng ký nhận thông báo. Vui lòng thử lại sau.');
+                }
+            });
+	            
 	            $('#bookDetailModal').modal('hide');
 	        });
 	    });
