@@ -2,6 +2,17 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page isELIgnored="false"%>
+<%@ page import="com.bookstore.admindaoimpl.AdminBookDaoImpl" %>
+<%@ page import="com.bookstore.model.Books" %>
+<%@ page import="java.util.List" %>
+
+<%
+// Fetch all books for the dropdown
+AdminBookDaoImpl dao = new AdminBookDaoImpl();
+List<Books> bookList = dao.getAllBooks();
+request.setAttribute("bookList", bookList);
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -53,10 +64,27 @@
 							</div>
 						</div>
 						
+						<!-- Book selection dropdown for refilling -->
+						<div id="bookSelectField" class="form-group" style="display: none;">
+							<label for="bookSelect">Select Book to Refill</label>
+							<select name="bookSelect" class="form-control" id="bookSelect" onchange="fillBookDetails()">
+								<option value="">-- Select a book --</option>
+								<c:forEach var="book" items="${bookList}">
+									<option value="${book.bookId}" 
+										data-title="${book.title}" 
+										data-author="${book.author}" 
+										data-price="${book.price}"
+										data-current-stock="${book.quantity}">
+										${book.title} by ${book.author} (Current Stock: ${book.quantity})
+									</option>
+								</c:forEach>
+							</select>
+						</div>
+						
 						<!-- Book ID field (only shown for refilling) -->
 						<div id="bookIdField" class="form-group" style="display: none;">
-							<label for="bookId">Book ID (optional, can search by title and author)</label>
-							<input name="bookId" type="text" class="form-control" id="bookId">
+							<label for="bookId">Book ID</label>
+							<input name="bookId" type="text" class="form-control" id="bookId" readonly>
 						</div>
 
 						<div class="form-group">
@@ -78,9 +106,12 @@
 						</div>
 						
 						<div class="form-group">
-							<label for="quantity">Quantity</label> <input
+							<label for="quantity" id="quantityLabel">Quantity</label> <input
 								name="quantity" type="number" class="form-control"
 								id="quantity" min="1" value="1" required>
+							<small id="currentStockInfo" class="form-text text-muted" style="display: none;">
+								Current stock: <span id="currentStockValue">0</span>
+							</small>
 						</div>
 						
 						<div id="descriptionField" class="form-group">
@@ -116,17 +147,57 @@
 			const isOldBook = document.getElementById('oldBook').checked;
 			
 			// Toggle visibility based on selection
+			document.getElementById('bookSelectField').style.display = isOldBook ? 'block' : 'none';
 			document.getElementById('bookIdField').style.display = isOldBook ? 'block' : 'none';
 			document.getElementById('descriptionField').style.display = isNewBook ? 'block' : 'none';
 			document.getElementById('imageField').style.display = isNewBook ? 'block' : 'none';
+			document.getElementById('currentStockInfo').style.display = isOldBook ? 'block' : 'none';
 			
 			// Update required attributes
 			document.getElementById('bookImage').required = isNewBook;
 			document.getElementById('description').required = isNewBook;
 			
+			// Update labels and input states
+			if (isOldBook) {
+				document.getElementById('quantityLabel').textContent = 'Additional Quantity to Add';
+				document.getElementById('bookName').readOnly = true;
+				document.getElementById('authorName').readOnly = true;
+				document.getElementById('price').readOnly = true;
+			} else {
+				document.getElementById('quantityLabel').textContent = 'Quantity';
+				document.getElementById('bookName').readOnly = false;
+				document.getElementById('authorName').readOnly = false;
+				document.getElementById('price').readOnly = false;
+				
+				// Clear fields if switching back to new book
+				document.getElementById('bookId').value = '';
+				document.getElementById('currentStockValue').textContent = '0';
+			}
+			
 			// Update button text
 			const submitBtn = document.querySelector('button[type="submit"]');
-			submitBtn.textContent = isNewBook ? 'Add Book' : 'Update Quantity';
+			submitBtn.textContent = isNewBook ? 'Add Book' : 'Update Stock';
+		}
+		
+		function fillBookDetails() {
+			const select = document.getElementById('bookSelect');
+			const selectedOption = select.options[select.selectedIndex];
+			
+			if (select.value) {
+				// Set values from data attributes
+				document.getElementById('bookId').value = select.value;
+				document.getElementById('bookName').value = selectedOption.getAttribute('data-title');
+				document.getElementById('authorName').value = selectedOption.getAttribute('data-author');
+				document.getElementById('price').value = selectedOption.getAttribute('data-price');
+				document.getElementById('currentStockValue').textContent = selectedOption.getAttribute('data-current-stock');
+			} else {
+				// Clear fields if no book selected
+				document.getElementById('bookId').value = '';
+				document.getElementById('bookName').value = '';
+				document.getElementById('authorName').value = '';
+				document.getElementById('price').value = '';
+				document.getElementById('currentStockValue').textContent = '0';
+			}
 		}
 		
 		// Initialize form state on page load
