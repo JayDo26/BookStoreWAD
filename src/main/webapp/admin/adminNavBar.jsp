@@ -3,7 +3,7 @@
 		<div class="col-md-3 text-sucess">
 
 			<h3>
-				<i class="fa-solid fa-book"></i> BookSaw
+				Pisces
 			</h3>
 
 		</div>

@@ -1,15 +1,21 @@
 package com.bookstore.util;
 
 import java.util.Properties;
+
+import jakarta.mail.Authenticator;
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
+import jakarta.mail.PasswordAuthentication;
+import jakarta.mail.Session;
+import jakarta.mail.Transport;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
-import jakarta.mail.*;
 
 public class SendEmailUtil {
 
     public static void sendEmail(String to, String subject, String content) throws MessagingException {
-        String from = "phantrananhquan10@gmail.com"; // Replace with your email
-        String password = "rgzzmlvbokirauae"; // Replace with your email's app password
+        String from = "dokiet262021@gmail.com"; // Replace with your email
+        String password = "cuumqvpqbjqjonma"; // Replace with your email's app password
 
         
         Properties props = new Properties();

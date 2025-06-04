@@ -1,6 +1,7 @@
 package com.bookstore.util;
 
 import java.util.List;
+
 import com.bookstore.model.Cart;
 import com.bookstore.model.Users;
 
@@ -26,7 +27,7 @@ public class EmailContentUtil {
         emailContent.append("\nSubtotal: $").append(total).append("\n");
         emailContent.append("Shipping Fee: $").append(shippingFee).append("\n");
         emailContent.append("Total (including shipping): $").append(finalTotal).append("\n\n");
-        emailContent.append("We hope to serve you again soon!\n\nBest regards,\nBookstore DSA Team");
+        emailContent.append("We hope to serve you again soon!\n\nBest regards,\nPisces BookStore");
 
         return emailContent.toString();
     }

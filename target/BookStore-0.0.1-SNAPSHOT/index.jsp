@@ -865,7 +865,348 @@
 	            
 	            $('#bookDetailModal').modal('hide');
 	        });
+
+            // Initialize the chatbot
+            initChatbot();
 	    });
+
+        // Chatbot functionality
+        function initChatbot() {
+            const chatbotHtml = `
+                <div id="chatbot-container">
+                    <div id="chatbot-button">
+                        <i class="icon icon-bubble"></i>
+                    </div>
+                    <div id="chatbot-window" class="hidden">
+                        <div id="chatbot-header">
+                            <div class="chatbot-title">Pisces Book Assistant</div>
+                            <div id="chatbot-close"><i class="icon icon-cross"></i></div>
+                        </div>
+                        <div id="chatbot-messages">
+                            <div class="bot-message">Hello! I'm your book assistant. How can I help you today?</div>
+                        </div>
+                        <div id="chatbot-input-container">
+                            <input type="text" id="chatbot-input" placeholder="Type your message...">
+                            <button id="chatbot-send">
+                                <i class="icon icon-arrow-right"></i>
+                            </button>
+                        </div>
+                        <div id="chatbot-typing" class="hidden">
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Append chatbot HTML to body
+            $('body').append(chatbotHtml);
+            
+            // Add chatbot styling
+            const chatbotStyles = `
+                <style>
+                    #chatbot-container {
+                        position: fixed;
+                        bottom: 20px;
+                        right: 20px;
+                        z-index: 1000;
+                        font-family: Arial, sans-serif;
+                    }
+                    
+                    #chatbot-button {
+                        width: 60px;
+                        height: 60px;
+                        border-radius: 50%;
+                        background-color: #7fb3d5;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        cursor: pointer;
+                        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+                        transition: all 0.3s ease;
+                    }
+                    
+                    #chatbot-button:hover {
+                        background-color: #5499c7;
+                        transform: scale(1.05);
+                    }
+                    
+                    #chatbot-button i {
+                        color: white;
+                        font-size: 24px;
+                    }
+                    
+                    #chatbot-window {
+                        position: absolute;
+                        bottom: 80px;
+                        right: 0;
+                        width: 320px;
+                        height: 400px;
+                        background-color: white;
+                        border-radius: 10px;
+                        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+                        display: flex;
+                        flex-direction: column;
+                        transition: all 0.3s ease;
+                        overflow: hidden;
+                    }
+                    
+                    #chatbot-window.hidden {
+                        opacity: 0;
+                        visibility: hidden;
+                        transform: translateY(20px);
+                    }
+                    
+                    #chatbot-header {
+                        padding: 15px;
+                        background-color: #7fb3d5;
+                        color: white;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        font-weight: bold;
+                    }
+                    
+                    #chatbot-close {
+                        cursor: pointer;
+                    }
+                    
+                    #chatbot-messages {
+                        flex: 1;
+                        padding: 15px;
+                        overflow-y: auto;
+                        display: flex;
+                        flex-direction: column;
+                    }
+                    
+                    .user-message, .bot-message {
+                        max-width: 80%;
+                        padding: 10px 15px;
+                        margin: 5px 0;
+                        border-radius: 18px;
+                        word-wrap: break-word;
+                    }
+                    
+                    .user-message {
+                        background-color: #7fb3d5;
+                        color: white;
+                        align-self: flex-end;
+                        border-bottom-right-radius: 5px;
+                    }
+                    
+                    .bot-message {
+                        background-color: #f0f0f0;
+                        color: #333;
+                        align-self: flex-start;
+                        border-bottom-left-radius: 5px;
+                    }
+                    
+                    #chatbot-input-container {
+                        display: flex;
+                        padding: 10px;
+                        background-color: #f8f9fa;
+                        border-top: 1px solid #e9ecef;
+                    }
+                    
+                    #chatbot-input {
+                        flex: 1;
+                        padding: 10px 15px;
+                        border: 1px solid #ced4da;
+                        border-radius: 20px;
+                        outline: none;
+                    }
+                    
+                    #chatbot-input:focus {
+                        border-color: #7fb3d5;
+                    }
+                    
+                    #chatbot-send {
+                        width: 40px;
+                        height: 40px;
+                        margin-left: 10px;
+                        background-color: #7fb3d5;
+                        color: white;
+                        border: none;
+                        border-radius: 50%;
+                        cursor: pointer;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        transition: background-color 0.3s;
+                    }
+                    
+                    #chatbot-send:hover {
+                        background-color: #5499c7;
+                    }
+                    
+                    #chatbot-typing {
+                        padding: 10px 15px;
+                        background-color: #f0f0f0;
+                        border-radius: 18px;
+                        margin: 5px 0;
+                        align-self: flex-start;
+                        display: flex;
+                        align-items: center;
+                        width: 60px;
+                        position: absolute;
+                        bottom: 60px;
+                        left: 15px;
+                    }
+                    
+                    #chatbot-typing.hidden {
+                        display: none;
+                    }
+                    
+                    .dot {
+                        height: 8px;
+                        width: 8px;
+                        background-color: #999;
+                        border-radius: 50%;
+                        margin: 0 2px;
+                        display: inline-block;
+                        animation: typing 1.4s infinite ease-in-out both;
+                    }
+                    
+                    .dot:nth-child(1) {
+                        animation-delay: 0s;
+                    }
+                    
+                    .dot:nth-child(2) {
+                        animation-delay: 0.2s;
+                    }
+                    
+                    .dot:nth-child(3) {
+                        animation-delay: 0.4s;
+                    }
+                    
+                    @keyframes typing {
+                        0%, 80%, 100% {
+                            transform: scale(0);
+                        }
+                        40% {
+                            transform: scale(1);
+                        }
+                    }
+                </style>
+            `;
+            
+            // Add styles to head
+            $('head').append(chatbotStyles);
+            
+            // Handle chat toggle
+            $('#chatbot-button').on('click', function() {
+                $('#chatbot-window').toggleClass('hidden');
+                // If opening the chat, scroll to bottom and focus input
+                if (!$('#chatbot-window').hasClass('hidden')) {
+                    scrollToBottom();
+                    $('#chatbot-input').focus();
+                }
+            });
+            
+            // Close chat window
+            $('#chatbot-close').on('click', function() {
+                $('#chatbot-window').addClass('hidden');
+            });
+            
+            // Function to add message to chat
+            function addMessage(message, isUser = false) {
+                const messageClass = isUser ? 'user-message' : 'bot-message';
+                const messageHtml = `<div class="${messageClass}">${message}</div>`;
+                $('#chatbot-messages').append(messageHtml);
+                scrollToBottom();
+            }
+            
+            // Function to scroll chat to bottom
+            function scrollToBottom() {
+                const chatMessages = document.getElementById('chatbot-messages');
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // Show typing indicator
+            function showTyping() {
+                $('#chatbot-typing').removeClass('hidden');
+                scrollToBottom();
+            }
+            
+            // Hide typing indicator
+            function hideTyping() {
+                $('#chatbot-typing').addClass('hidden');
+            }
+            
+            // Send message on button click
+            $('#chatbot-send').on('click', sendMessage);
+            
+            // Send message on Enter key
+            $('#chatbot-input').on('keypress', function(event) {
+                if (event.which === 13) {  // Enter key
+                    sendMessage();
+                }
+            });
+            
+            // Function to send message to chatbot API
+            function sendMessage() {
+                const userMessage = $('#chatbot-input').val().trim();
+                
+                // Don't send empty messages
+                if (userMessage === '') return;
+                
+                // Add user message to chat
+                addMessage(userMessage, true);
+                
+                // Clear input
+                $('#chatbot-input').val('');
+                
+                // Show typing indicator
+                showTyping();
+                
+                console.log("Sending message to API:", userMessage);
+                
+                // Send request directly to the external API - using HTTPS
+                $.ajax({
+                    url: 'https://logically-exact-phoenix.ngrok-free.app/chat',  // Use HTTPS instead of HTTP
+                    type: 'POST',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    crossDomain: true,  // Explicitly indicate cross-domain request
+                    xhrFields: {
+                        withCredentials: false  // Disable credentials for cross-domain requests
+                    },
+                    data: JSON.stringify({ query: userMessage }),
+                    success: function(response) {
+                        console.log("Received API response:", response);
+                        // Hide typing indicator
+                        hideTyping();
+                        
+                        // Add bot response to chat
+                        if (response && response.reply) {
+                            addMessage(response.reply);
+                        } else {
+                            addMessage("Sorry, I couldn't understand the response. Please try again.");
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error in API request:", status, error);
+                        console.log("Response status:", xhr.status);
+                        
+                        // Hide typing indicator
+                        hideTyping();
+                        
+                        // Show specific error message based on the error type
+                        if (xhr.status === 0) {
+                            addMessage("I can't connect to the server. This might be due to CORS restrictions or network issues. Please try again later.");
+                        } else {
+                            try {
+                                const errorResponse = JSON.parse(xhr.responseText);
+                                addMessage(errorResponse.reply || "Sorry, I encountered an error. Please try again.");
+                            } catch (e) {
+                                addMessage("I'm having trouble connecting to my knowledge base. Please try again later.");
+                            }
+                        }
+                    }
+                });
+            }
+        }
 	</script>
 
 </body>
