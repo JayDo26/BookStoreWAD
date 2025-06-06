@@ -10,4 +10,6 @@ public interface PreorderDao {
     boolean isAlreadyPreordered(int userId, int bookId);
     List<Preorder> getPreordersByBookId(int bookId) throws SQLException;
     boolean markAsNotified(int bookId);
+    boolean isAlreadyPreorderedByEmail(String email, int bookId);
+    boolean addPreorderWithEmail(String email, String name, int bookId);
 }

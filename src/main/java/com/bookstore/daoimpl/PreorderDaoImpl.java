@@ -114,4 +114,46 @@ public class PreorderDaoImpl implements PreorderDao {
             return false;
         }
     }
+
+    @Override
+    public boolean isAlreadyPreorderedByEmail(String email, int bookId) {
+        // Implementation to check if email has already preordered the book
+        // This is a placeholder implementation - adjust according to your database structure
+        try (Connection conn = DBUtil.openConnection();
+             PreparedStatement stmt = conn.prepareStatement(
+                 "SELECT COUNT(*) FROM preorders WHERE email = ? AND book_id = ?")) {
+            
+            stmt.setString(1, email);
+            stmt.setInt(2, bookId);
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Error checking if email has preordered", e);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean addPreorderWithEmail(String email, String name, int bookId) {
+        // Implementation to add a preorder with email
+        // This is a placeholder implementation - adjust according to your database structure
+        try (Connection conn = DBUtil.openConnection();
+             PreparedStatement stmt = conn.prepareStatement(
+                 "INSERT INTO preorders (email, name, book_id, preorder_date) VALUES (?, ?, ?, NOW())")) {
+            
+            stmt.setString(1, email);
+            stmt.setString(2, name);
+            stmt.setInt(3, bookId);
+            
+            int result = stmt.executeUpdate();
+            return result > 0;
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Error adding preorder with email", e);
+        }
+        return false;
+    }
 }

@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>BookSaw - Admin</title>
+<title>Pisces - Admin</title>
 <%@include file="admin/admin.jsp"%>
 <style type="text/css">
 .back-img {

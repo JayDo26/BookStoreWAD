@@ -26,6 +26,7 @@
 /Users/jaydo/bookstore/src/main/java/com/bookstore/daoimpl/BookDaoImpl.java
 /Users/jaydo/bookstore/src/main/java/com/bookstore/util/EmailContentUtil.java
 /Users/jaydo/bookstore/src/main/java/com/bookstore/dao/PreorderDao.java
+/Users/jaydo/bookstore/src/main/java/com/bookstore/servlet/PreorderServlet.java
 /Users/jaydo/bookstore/src/main/java/com/bookstore/dao/ProductDao.java
 /Users/jaydo/bookstore/src/main/java/com/bookstore/daoimpl/CartDaoImpl.java
 /Users/jaydo/bookstore/src/main/java/com/bookstore/dao/CartDao.java
@@ -42,6 +43,7 @@
 /Users/jaydo/bookstore/src/main/java/com/bookstore/servlet/CartHomeServlet.java
 /Users/jaydo/bookstore/src/main/java/com/bookstore/servlet/AdminOrderServlet.java
 /Users/jaydo/bookstore/src/main/java/com/bookstore/admindaoimpl/AdminBookDaoImpl.java
+/Users/jaydo/bookstore/src/main/java/com/bookstore/servlet/ChatbotServlet.java
 /Users/jaydo/bookstore/src/main/java/com/bookstore/model/Admin.java
 /Users/jaydo/bookstore/src/main/java/com/bookstore/servlet/ShippingServlet.java
 /Users/jaydo/bookstore/src/main/java/com/bookstore/servlet/DeleteBookServlet.java

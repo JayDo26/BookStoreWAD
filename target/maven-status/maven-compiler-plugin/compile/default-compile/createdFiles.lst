@@ -16,6 +16,7 @@ com/bookstore/servlet/HomeServlet.class
 com/bookstore/dao/CartDao.class
 com/bookstore/servlet/ShippingServlet.class
 com/bookstore/admindaoimpl/AdminBookDaoImpl.class
+com/bookstore/servlet/ChatbotServlet.class
 com/bookstore/servlet/SignupServlet.class
 com/bookstore/servlet/ConfirmOrderServlet.class
 com/bookstore/admindaoimpl/AdminDaoImpl.class
@@ -40,6 +41,7 @@ com/bookstore/servlet/EditBooksServlet.class
 com/bookstore/util/EmailContentUtil.class
 com/bookstore/servlet/AddToCartServlet.class
 com/bookstore/dao/OrderDao.class
+com/bookstore/servlet/PreorderServlet.class
 com/bookstore/util/SendEmailUtil$1.class
 com/bookstore/util/BookSearchUtil$Trie.class
 com/bookstore/model/Preorder.class
